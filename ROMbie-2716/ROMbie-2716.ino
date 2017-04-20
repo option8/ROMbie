@@ -13,7 +13,7 @@
 
 // A 2708 would be 8 kilobits, or 8 * 1024 / 8 =
 // 1024.
-#define MAX_ADDR 1024L
+#define MAX_ADDR 2048L
 
 // On my board, I've connected pins 26-41
 // to the Address0-A15 lines, and pins 2-10 to the
@@ -65,9 +65,9 @@ uint8_t readByte() {
   uint8_t data2 = 0;
   uint8_t mask2 = 0x1;
 
- // digitalWrite(LEDPin, HIGH);
+  // digitalWrite(LEDPin, HIGH);
 
-  delay(10);
+  delay(30);
 
   for (int i = Data0; i < Data0 + 8; i++) {
     //for (int i = Data0 + 7; i > Data0 - 1 ; i--) { // for systems where the bit order is reversed
@@ -77,7 +77,7 @@ uint8_t readByte() {
     mask = mask << 1;
   }
 
-  delay(10);
+  delay(20);
 
   for (int i = Data0; i < Data0 + 8; i++) {
     //for (int i = Data0 + 7; i > Data0 - 1 ; i--) {
@@ -86,7 +86,7 @@ uint8_t readByte() {
     }
     mask2 = mask2 << 1;
   }
- // digitalWrite(LEDPin, LOW);
+  // digitalWrite(LEDPin, LOW);
   if (data == data2) {
     return data;
   } else {
@@ -108,7 +108,7 @@ void loop() {
       Serial.print(b, HEX);
       Serial.print(" ");
       addr++;
-      delay(50);
+      delay(30);
     }
     Serial.println("");
   }

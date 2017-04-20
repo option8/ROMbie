@@ -23,12 +23,15 @@
 #define Data0 12
 #define LEDPin 11
 
-
+int ROMthreshold = 300;
+int AnalogPins[] = {A9, A8, A7, A6, A5, A4, A3, A2, A1, A0};
 
 // When you're all wired up, hit the reset button
 // to start dumping the hex codes.
 
 void setup() {
+
+
 
   pinMode(LEDPin, OUTPUT);
 
@@ -39,8 +42,13 @@ void setup() {
     pinMode(i, OUTPUT);
   }
   for (int i = Data0; i < Data0 + 8; i++) {
-    digitalWrite(i, HIGH);
-    pinMode(i, INPUT);
+
+    int a = i - Data0; //
+
+    //   digitalWrite(i, HIGH);
+    //   pinMode(i, INPUT);
+    analogWrite(AnalogPins[a], HIGH);
+    pinMode(AnalogPins[a], INPUT);
   }
   Serial.begin(300);
 }
@@ -65,32 +73,42 @@ uint8_t readByte() {
   uint8_t data2 = 0;
   uint8_t mask2 = 0x1;
 
- // digitalWrite(LEDPin, HIGH);
+  // digitalWrite(LEDPin, HIGH);
 
-  delay(10);
+  delay(50);
 
   for (int i = Data0; i < Data0 + 8; i++) {
     //for (int i = Data0 + 7; i > Data0 - 1 ; i--) { // for systems where the bit order is reversed
-    if (digitalRead(i)) {
+    int a = i - Data0; //
+
+    Serial.print(analogRead(AnalogPins[a]));
+    Serial.print(" ");
+
+    if (analogRead(AnalogPins[a]) > ROMthreshold) {
+      // if (digitalRead(i)) {
       data |= mask;
     }
     mask = mask << 1;
   }
 
-  delay(10);
+  delay(50);
 
   for (int i = Data0; i < Data0 + 8; i++) {
     //for (int i = Data0 + 7; i > Data0 - 1 ; i--) {
-    if (digitalRead(i)) {
+    int a = i - Data0; //
+
+    if (analogRead(AnalogPins[a]) > ROMthreshold) {
+      //    if (digitalRead(i)) {
       data2 |= mask2;
     }
     mask2 = mask2 << 1;
   }
- // digitalWrite(LEDPin, LOW);
+  // digitalWrite(LEDPin, LOW);
   if (data == data2) {
+    Serial.println();
     return data;
   } else {
-    Serial.print("*");
+    Serial.println("*");
     readByte(); // try again
   }
 
